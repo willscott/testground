@@ -3,7 +3,6 @@ package utils
 import (
 	"context"
 
-	ipfsClient "github.com/ipfs/go-ipfs-api"
 	iface "github.com/ipfs/interface-go-ipfs-core"
 	"github.com/ipfs/testground/sdk/iptb"
 	"github.com/ipfs/testground/sdk/runtime"
@@ -30,9 +29,7 @@ type TestCaseOptions struct {
 	// Config is the test configuration.
 	TestConfig
 
-	// IpfsInstance is a connection to the in-process IPFS instance through Core API.
-	IpfsInstance iface.CoreAPI
+	API iface.CoreAPI
 
-	// IpfsDaemon is a connection to a daemon instance of IPFS through IPTB.
-	IpfsDaemon *ipfsClient.Shell
+	Mode string
 }

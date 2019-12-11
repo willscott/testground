@@ -29,11 +29,12 @@ require (
 	github.com/hashicorp/go-getter v1.4.0
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/imdario/mergo v0.3.8
+	github.com/ipfs/interface-go-ipfs-core v0.2.5 // indirect
+	github.com/ipfs/testground/sdk/iptb v0.0.0-00010101000000-000000000000 // indirect
 	github.com/ipfs/testground/sdk/runtime v0.0.0-00010101000000-000000000000
 	github.com/ipfs/testground/sdk/sync v0.0.0-00010101000000-000000000000
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20191017060258-dc85c304c434
-	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.0
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/morikuni/aec v1.0.0 // indirect

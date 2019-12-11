@@ -29,37 +29,27 @@ func (t *IpfsFileStore) AddRepoOptions() iptb.AddRepoOptions {
 }
 
 func (t *IpfsFileStore) Execute(ctx context.Context, runenv *runtime.RunEnv, cfg *utils.TestCaseOptions) {
-	if cfg.IpfsInstance != nil {
-		runenv.Message("Running against the Core API")
-
-		err := cfg.ForEachPath(runenv, func(path string, size int64, isDir bool) (string, error) {
-			unixfsFile, err := utils.ConvertToUnixfs(path, isDir)
-			if err != nil {
-				return "", err
-			}
-
-			addOptions := coreopts.Unixfs.Nocopy(true)
-			cidFile, err := cfg.IpfsInstance.Unixfs().Add(ctx, unixfsFile, addOptions)
-			if err != nil {
-				return "", err
-			}
-
-			return cidFile.String(), nil
-		})
-
+	err := cfg.ForEachPath(runenv, func(path string, size int64, isDir bool) (string, error) {
+		unixfsFile, err := utils.ConvertToUnixfs(path, isDir)
 		if err != nil {
-			runenv.Abort(err)
-			return
+			return "", err
 		}
 
-		// TODO: Act II and Act III
-		runenv.Message("Test incomplete")
+		addOptions := coreopts.Unixfs.Nocopy(true)
+		cidFile, err := cfg.API.Unixfs().Add(ctx, unixfsFile, addOptions)
+		if err != nil {
+			return "", err
+		}
+
+		return cidFile.String(), nil
+	})
+
+	if err != nil {
+		runenv.Abort(err)
+		return
 	}
 
-	if cfg.IpfsDaemon != nil {
-		runenv.Message("Running against the Daemon (IPTB)")
-		runenv.Message("Not implemented yet")
-	}
-
+	// TODO: Act II and Act III
+	runenv.Message("Test incomplete")
 	runenv.OK()
 }

@@ -37,12 +37,6 @@ func main() {
 
 	ctx := context.Background()
 
-	opts := &utils.TestCaseOptions{
-		IpfsInstance: nil,
-		IpfsDaemon:   nil,
-		TestConfig:   cfg,
-	}
-
 	mode, modeSet := runenv.StringParam("mode")
 
 	testCoreAPI := true
@@ -62,7 +56,7 @@ func main() {
 	addRepoOptions := tc.AddRepoOptions()
 
 	if testCoreAPI {
-		ipfs, err := utils.CreateIpfsInstance(ctx, &utils.IpfsInstanceOptions{
+		api, err := utils.CreateIpfsInstance(ctx, &utils.IpfsInstanceOptions{
 			AddRepoOptions: addRepoOptions,
 		})
 		if err != nil {
@@ -70,19 +64,25 @@ func main() {
 			return
 		}
 
-		opts.IpfsInstance = ipfs
+		tc.Execute(ctx, runenv, &utils.TestCaseOptions{
+			API:        api,
+			TestConfig: cfg,
+			Mode:       "coreapi",
+		})
 	}
 
 	if testDaemon {
-		ensemble, client := iptb.SpawnDaemon(ctx, iptb.NodeOpts{
+		ensemble, api := iptb.SpawnDaemon(ctx, iptb.NodeOpts{
 			Initialize:     true,
 			Start:          true,
 			AddRepoOptions: addRepoOptions,
 		})
 		defer ensemble.Destroy()
 
-		opts.IpfsDaemon = client
+		tc.Execute(ctx, runenv, &utils.TestCaseOptions{
+			API:        api,
+			TestConfig: cfg,
+			Mode:       "daemon",
+		})
 	}
-
-	tc.Execute(ctx, runenv, opts)
 }
