@@ -55,6 +55,8 @@ RUN cd ${PLAN_DIR} \
 #FROM busybox:1.31.0-glibc # Doesn't work with prebuilt IPFS binaries
 FROM debian
 
+RUN apt update && apt install -y net-tools netcat traceroute iputils-ping wget curl telnet iproute2 dnsutils
+
 COPY --from=0 /testground_dep_list /
 COPY --from=0 /plan/testplan /
 RUN mkdir -p /usr/local/bin

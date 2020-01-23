@@ -3,13 +3,27 @@ package test
 import (
 	"context"
 	"fmt"
+	"os/exec"
 	"time"
 
 	"github.com/ipfs/testground/sdk/runtime"
 	"github.com/ipfs/testground/sdk/sync"
 )
 
+func iproute() {
+	cmd := exec.Command("ip", "route")
+	stdout, err := cmd.Output()
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println(string(stdout))
+}
+
 func FindPeers(runenv *runtime.RunEnv) {
+	runenv.Message("starting findPeers")
 	opts := &SetupOpts{
 		Timeout:     time.Duration(runenv.IntParam("timeout_secs")) * time.Second,
 		RandomWalk:  runenv.BooleanParam("random_walk"),
@@ -26,19 +40,31 @@ func FindPeers(runenv *runtime.RunEnv) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), opts.Timeout)
 	defer cancel()
+	//runenv.Message("ip route - first")
+	//iproute()
+	//time.Sleep(5 * time.Second)
+	//runenv.Message("ip route - second")
+	//iproute()
 
+	runenv.Message("before MustWatcherWriter")
 	watcher, writer := sync.MustWatcherWriter(runenv)
 	defer watcher.Close()
 	defer writer.Close()
 
+	runenv.Message("before Setup")
 	_, dht, peers, seq, err := Setup(ctx, runenv, watcher, writer, opts)
 	if err != nil {
 		runenv.Abort(err)
 		return
 	}
 
+	//time.Sleep(5 * time.Second)
+	//runenv.Message("ip route - after setup")
+	//iproute()
+
 	defer Teardown(ctx, runenv, watcher, writer)
 
+	runenv.Message("before Bootstrap")
 	// Bring the network into a nice, stable, bootstrapped state.
 	if err = Bootstrap(ctx, runenv, watcher, writer, opts, dht, peers, seq); err != nil {
 		runenv.Abort(err)

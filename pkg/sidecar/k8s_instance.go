@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/containernetworking/cni/libcni"
 	"github.com/vishvananda/netlink"
@@ -317,7 +318,10 @@ func (n *K8sNetwork) ConfigureNetwork(ctx context.Context, cfg *sync.NetworkConf
 			CapabilityArgs: capabilityArgs,
 		}
 
-		_, err = n.cninet.AddNetworkList(ctx, netconf, rt)
+		err = retry(5, 1000*time.Millisecond, func() error {
+			_, err = n.cninet.AddNetworkList(ctx, netconf, rt)
+			return err
+		}, n.container.ID)
 		if err != nil {
 			return fmt.Errorf("failed to add network through cni plugin: %w", err)
 		}
@@ -435,4 +439,21 @@ func getRedisRoute(handle *netlink.Handle, redisIP net.IP) (*netlink.Route, erro
 	redisRoute := redisRoutes[0]
 
 	return &redisRoute, nil
+}
+
+func retry(attempts int, sleep time.Duration, f func() error, containerID string) (err error) {
+	for i := 0; ; i++ {
+		err = f()
+		if err == nil {
+			return
+		}
+
+		logging.S().Warnw("got error in retry", "err", err.Error(), "container", containerID)
+		if i >= (attempts - 1) {
+			break
+		}
+
+		time.Sleep(sleep)
+	}
+	return fmt.Errorf("after %d attempts, last error: %s", attempts, err)
 }
