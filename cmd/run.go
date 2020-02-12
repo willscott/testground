@@ -38,13 +38,9 @@ var RunCommand = cli.Command{
 					Name:  "ignore-artifacts, i",
 					Usage: "Ignores any build artifacts present in the composition file.",
 				},
-				cli.BoolFlag{
-					Name:  "collect",
-					Usage: "Collect assets at the end of the run phase.",
-				},
 				cli.StringFlag{
-					Name:  "collect-file, o",
-					Usage: "Destination for the assets if --collect is set",
+					Name:  "collect, o",
+					Usage: "Collect assets at the end of the run phase.",
 				},
 			},
 		},
@@ -184,12 +180,11 @@ func doRun(c *cli.Context, comp *api.Composition) (err error) {
 	logging.S().Infof("finished run with ID: %s", rout.RunID)
 
 	// if the `collect` flag is not set, we are done, just return
-	collect := c.Bool("collect")
-	if !collect {
+	if !c.IsSet("collect") {
 		return nil
 	}
 
-	collectFile := c.String("collect-file")
+	collectFile := c.String("collect")
 	if collectFile == "" {
 		collectFile = fmt.Sprintf("%s.zip", rout.RunID)
 	}
