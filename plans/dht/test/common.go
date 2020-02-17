@@ -437,17 +437,6 @@ func Setup(ctx context.Context, runenv *runtime.RunEnv, watcher *sync.Watcher, w
 		}
 	}
 
-	m := make(map[peer.ID]bool)
-	for _, info := range otherNodes {
-		_, undialable := info.properties[Undialable]
-		m[info.addrs.ID] = undialable
-	}
-
-	_, undialable := testNode.info.properties[Undialable]
-	m[testNode.info.addrs.ID] = undialable
-
-	runenv.RecordMessage("%v", m)
-
 	outputStart(testNode)
 
 	return testNode, otherNodes, nil
@@ -1080,15 +1069,15 @@ func Connect(ctx context.Context, runenv *runtime.RunEnv, dht *kaddht.IpfsDHT, t
 		var err error
 		for i := 1; i <= attempts; i++ {
 			runenv.RecordMessage("dialling peer %s (attempt %d)", ai.ID, i)
-			//select {
-			//case <-time.After(time.Duration(rand.Intn(500))*time.Millisecond + 6*time.Second):
-			//case <-ctx.Done():
-			//	return fmt.Errorf("error while dialing peer %v, attempts made: %d: %w", ai.Addrs, i, ctx.Err())
-			//}
 			if err = dht.Host().Connect(ctx, ai); err == nil {
 				return nil
 			} else {
 				runenv.RecordMessage("failed to dial peer %v (attempt %d), err: %s", ai.ID, i, err)
+			}
+			select {
+			case <-time.After(time.Duration(rand.Intn(500))*time.Millisecond + 6*time.Second):
+			case <-ctx.Done():
+				return fmt.Errorf("error while dialing peer %v, attempts made: %d: %w", ai.Addrs, i, ctx.Err())
 			}
 		}
 		return fmt.Errorf("failed while dialing peer %v, attempts: %d: %w", ai.Addrs, attempts, err)
@@ -1249,12 +1238,14 @@ func outputGraph(dht *kaddht.IpfsDHT, graphID string) {
 			graphLogger.Infow(graphID, "From", c.LocalPeer().Pretty(), "To", c.RemotePeer().Pretty())
 		}
 	}
+	graphLogger.Sync()
 
 	for i, b := range dht.RoutingTable().Buckets {
 		for _, p := range b.Peers() {
 			rtLogger.Infow(graphID, "Node", dht.PeerID().Pretty(), "Bucket", strconv.Itoa(i), "Peer", p.Pretty())
 		}
 	}
+	rtLogger.Sync()
 }
 
 func outputStart(node *NodeParams) {
@@ -1266,4 +1257,5 @@ func outputStart(node *NodeParams) {
 		"peerID", node.info.addrs.ID.Pretty(),
 		"addrs", node.info.addrs.Addrs,
 	)
+	nodeLogger.Sync()
 }

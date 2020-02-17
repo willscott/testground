@@ -27,13 +27,13 @@
       module = "github.com/libp2p/go-libp2p-autonat"
       version = "v0.1.2-0.20200204200147-902af8cb7b6a"
   [groups.run]
-    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-dht:1b35a50ab2b6"
+    artifact = "909427826938.dkr.ecr.us-east-1.amazonaws.com/testground-us-dht:f98179af6cc9"
     [groups.run.test_params]
-      bucket_size = "4"
+      bucket_size = "10"
       client_mode = "false"
       datastore = "0"
-      f_undialable = "0.9"
-      n_paths = "0"
-      n_providing = "1"
+      f_undialable = "0.0"
+      n_paths = "1"
+      n_providing = "5"
       record_count = "5"
       timeout_secs = "2000"
