@@ -260,6 +260,8 @@ github.com/ipfs/go-todocounter v0.0.2/go.mod h1:l5aErvQc8qKE2r7NDMjmq5UNAvuZy0rC
 github.com/ipfs/testground v0.1.0/go.mod h1:9obuj1h0ueQuJ5zV5ro69NwU3AHAIw7FXYT1DOj3Ygs=
 github.com/ipfs/testground/plans/dht v0.0.0-20200214183615-04517bf90e6c h1:KbCtCihrKcHGkL742hA62PGaVGCJykVJ8vNYTO9VYiU=
 github.com/ipfs/testground/plans/dht v0.0.0-20200214183615-04517bf90e6c/go.mod h1:4ITNemWTVH42xEF9LngUbVl6I6lB7SFfJdWjpPlbFl8=
+github.com/ipfs/testground/plans/dht v0.0.0-20200218145816-fa0aa6978e92 h1:lGbKQ18vFYCJmZDS87oHRieGOhxIH5ifn45xNcg9k9o=
+github.com/ipfs/testground/plans/dht v0.0.0-20200218145816-fa0aa6978e92/go.mod h1:4ITNemWTVH42xEF9LngUbVl6I6lB7SFfJdWjpPlbFl8=
 github.com/jackpal/gateway v1.0.5 h1:qzXWUJfuMdlLMtt0a3Dgt+xkWQiA5itDEITVJtuSwMc=
 github.com/jackpal/gateway v1.0.5/go.mod h1:lTpwd4ACLXmpyiCTRtfiNyVnUmqT9RivzCDQetPfnjA=
 github.com/jackpal/go-nat-pmp v1.0.1 h1:i0LektDkO1QlrTm/cSuP+PyBCDnYvjPLGl4LdWEMiaA=

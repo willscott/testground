@@ -25,12 +25,12 @@ require (
 	github.com/hashicorp/go-getter v1.4.0
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/imdario/mergo v0.3.8
+	github.com/ipfs/testground/plans/dht v0.0.0-20200218145816-fa0aa6978e92 // indirect
 	github.com/ipfs/testground/sdk/runtime v0.1.0
 	github.com/ipfs/testground/sdk/sync v0.1.0
 	github.com/libp2p/go-conn-security v0.1.0 // indirect
 	github.com/libp2p/go-libp2p v6.0.23+incompatible // indirect
 	github.com/libp2p/go-libp2p-autonat-svc v0.1.0 // indirect
-	github.com/libp2p/go-libp2p-connmgr v0.2.1 // indirect
 	github.com/libp2p/go-libp2p-host v0.1.0 // indirect
 	github.com/libp2p/go-libp2p-interface-connmgr v0.1.0 // indirect
 	github.com/libp2p/go-libp2p-interface-pnet v0.1.0 // indirect
